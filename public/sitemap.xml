@@ -10,6 +10,8 @@
   </url><url>
     <loc>http://example.org/post/</loc>
   </url><url>
+    <loc>http://example.org/post/shocks/</loc>
+  </url><url>
     <loc>http://example.org/tags/</loc>
   </url><url>
     <loc>http://example.org/post/2022-12-16-the-ground-game/</loc>
