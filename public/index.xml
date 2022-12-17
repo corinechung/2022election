@@ -12,7 +12,8 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://example.org/post/advertisements/</guid>
-      <description></description>
+      <description>This week, I explored the effect of political advertisements (from 2006 to 2018) on the Democrat voteshare at the Congressional district level. The specific relationship I will explore is the effect that Democratic advertisement share (the percentage of ads run in the district that were for the Democratic candidate) has on Democratic voteshare.
+I ran a simple linear regression model between Democratic voteshare and Democratic ad share. The table below shows each district’s linear regression model and its r-squared value and coefficient for Democratic ad share.</description>
     </item>
     
   </channel>

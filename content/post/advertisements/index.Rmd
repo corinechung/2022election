@@ -6,3 +6,124 @@ slug: []
 categories: []
 tags: []
 ---
+```{r libraries, include = FALSE}
+# hide
+knitr::opts_chunk$set(echo = FALSE)
+# libraries
+library(tidyverse)
+library(ggplot2)
+library(blogdown)
+library(stargazer)
+library(readr)
+library(lubridate)
+library(rmapshaper)
+library(janitor)
+library(leaflet)
+library(stringr)
+library(ggthemes)
+library(gridExtra)
+library(usdata)
+library(ggrepel)
+library(usmap)
+library(stats)
+library(magrittr)
+library(dplyr)
+library(sf)
+library(geojsonio)
+library(htmlTable)
+
+
+incumbent <- read_csv("incumb_dist_1948-2020 (3).csv")
+ads <- readRDS("ads_2006_2018 (1).rds")
+polls <- read_csv("dist_polls_2018-2022.csv")
+```
+
+This week, I explored the effect of political advertisements (from 2006 to 2018) on the Democrat voteshare at the Congressional district level. The specific relationship I will explore is the effect that Democratic advertisement share (the percentage of ads run in the district that were for the Democratic candidate) has on Democratic voteshare.
+
+```{r ads, include = FALSE}
+# separate ads data for democrats
+ads_dems <- ads %>%
+  filter(party == "Democrat") %>%
+  group_by(cycle, state, district, st_cd_fips) %>%
+  summarize(count = n()) %>%
+  rename(year = cycle)
+
+ads_reps <- ads %>% 
+  filter(party == "Republican") %>%
+  group_by(cycle, state, district, st_cd_fips) %>%
+  summarize(count = n()) %>%
+  rename(year = cycle)
+
+ads_share <- full_join(ads_dems, ads_reps, by = c("year", "st_cd_fips")) %>%
+  mutate(dem_ad_share = count.x/(count.x + count.y) * 100) %>%
+  drop_na(dem_ad_share)
+
+dem_results <- incumbent %>% 
+  select(year, state, st_cd_fips, DemVotesMajorPercent)
+```
+
+```{r models, include = FALSE}
+train_data <- full_join(dem_results, ads_share, by = c("year", "st_cd_fips")) %>%
+  filter(year < 2018) %>%
+  drop_na() %>%
+  group_by(state, st_cd_fips) %>%
+  filter(n() > 1) %>%
+  group_nest() %>%
+  mutate(data = map(data, ~unnest(., cols = c())))
+
+models <- train_data %>% 
+  mutate(model = map(data, ~lm(DemVotesMajorPercent ~ dem_ad_share, 
+                                  data = .x))) %>% 
+  select(-data)
+
+model_results <- models %>% 
+  mutate(r_squared = map_dbl(model, ~summary(.x)$r.squared), # r-squared values 
+         coefficient = map_dbl(model, ~summary(.x)$coefficients[2])) %>%
+  select(state, st_cd_fips, r_squared, coefficient)
+```
+
+I ran a simple linear regression model between Democratic voteshare and Democratic ad share. The table below shows each district’s linear regression model and its r-squared value and coefficient for Democratic ad share.
+
+```{r table of models}
+print(model_results, n = 152)
+```
+
+From these model results, I plot the distribution of the coefficients and r-squared values.
+
+```{r coefficient}
+# distribution of coefficients of linear regression models
+ggplot(data = model_results, mapping = aes(x = coefficient)) +
+  geom_histogram(bins = 50, aes(y=..count../sum(..count..)), fill = "lightsteelblue", color = "lightsteelblue4") +
+  labs(title = "Distribution of Coefficients of the Linear Regression Models \n(of Democratic Vote Share by Democratic Ad Share)",
+       x = "Coefficients",
+       y = "Proportion")
+```
+
+The above graph is the distribution of the coefficients of the congressional districts available in the 2006-2018 data. Almost all of the coefficients fell in the 0 range.
+
+Because of this, I focus on the center of the graph, which is approximately the -5 to 5 range, by introducing limits.
+
+```{r smaller coefficient}
+
+ggplot(data = model_results, mapping = aes(x = coefficient)) +
+  geom_histogram(bins = 50, aes(y=..count../sum(..count..)), fill = "lightsteelblue", color = "lightsteelblue4") +
+  labs(title = "Distribution of Coefficients of the Linear Regression Models \n(of Democratic Vote Share by Democratic Ad Share)",
+       x = "Coefficients",
+       y = "Proportion") +
+  xlim(-5, 5)
+```
+
+Now, although the distribution is still relatively normal, there are more districts with positive coefficients. This is indicative that there are more districts where there is a positive between Democratic ad share and Democratic voteshare, meaning the greater the Democratic ad share, the greater the Democratic voteshare is.
+
+Next, I examine the distribution of r-squared values.
+
+```{r graph 2}
+# distribution of r squared values
+ggplot(data = model_results, mapping = aes(x = r_squared)) +
+  geom_histogram(bins = 50, aes(y=..count../sum(..count..)), fill = "lightsteelblue", color = "lightsteelblue4") +
+  labs(title = "Distribution of R Squared Values  of the Linear Regression Models \n(of Democratic Vote Share by Democratic Ad Share",
+       x = "R Squared",
+       y = "Proportion")
+```
+
+The above graph is the distribution of the r-squared values of the congressional districts available in the 2006-2018 data. Most of the models have an r-squared value of 1. This means that the predicted value was identical to the observed value. This may have been an error, as I tried to filter out districts with only one value to base the prediction on.
