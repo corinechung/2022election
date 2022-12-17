@@ -1,0 +1,310 @@
+---
+title: Final Prediction
+author: ''
+date: ''
+slug: []
+categories: []
+tags: []
+---
+```{r libraries, include = FALSE}
+# hide
+knitr::opts_chunk$set(echo = FALSE)
+# libraries
+library(tidyverse)
+library(ggplot2)
+library(blogdown)
+library(stargazer)
+library(readr)
+library(lubridate)
+library(rmapshaper)
+library(janitor)
+library(leaflet)
+library(stringr)
+library(ggthemes)
+library(gridExtra)
+library(usdata)
+library(ggrepel)
+library(usmap)
+library(stats)
+library(magrittr)
+```
+
+```{r data, include = FALSE, echo = FALSE}
+# reading in data
+house <- read_csv("house nationwide vote and seat share by party 1948-2020.csv")
+generic <- read.csv("GenericPolls1942_2020.csv")
+generic_2022 <- read.csv("538_generic_poll_2022.csv")
+# polls_df <- read_csv("polls_df.csv")
+# experts <- read_csv("expert_rating.csv")
+# incumb_dist <- read_csv("incumb_dist_1948_2020.csv") 
+```
+
+```{r gdp, include = FALSE, echo = FALSE}
+gdp <- read_csv("GDP_quarterly_updates22.csv")
+gdp <- gdp %>% 
+  filter(quarter_cycle == 7) %>% 
+  select("year", "GDP_growth_pct")
+```
+
+```{r generic, include = FALSE, echo = FALSE}
+
+# add year in 2022 df
+generic_2022 <- generic_2022 %>% 
+  mutate(year = "2022")
+
+# sort for results 52 days before election
+generic_2022$enddate <- as.Date(generic_2022$enddate, format = "%m/%d/%y")
+   
+electionday <- as.Date("2022-11-08")
+generic_2022 <- generic_2022 %>%    
+  mutate(days_until_election = electionday - enddate) 
+
+generic_2022$days_until_election <- gsub(" days", "", generic_2022$days_until_election)
+
+generic_2022$days_until_election <- as.numeric(generic_2022$days_until_election)
+
+generic_2022_close <- generic_2022 %>% 
+  filter(days_until_election <= 52)
+
+# sort by days until election
+generic$year <- as.numeric(generic$year)
+generic <- generic %>% 
+  filter(days_until_election <= 52) %>% 
+  filter(days_until_election >= 0) 
+
+# mean percentages per year
+generic_2022_close <- generic_2022_close %>% 
+  group_by(year) %>% 
+  mutate(mean_dem = mean(adjusted_dem)) %>% 
+  mutate(mean_rep = mean(adjusted_rep))
+
+generic_2022_avg <- generic_2022_close %>% 
+  filter(days_until_election == 51) %>% 
+  select("year", "mean_dem", "mean_rep")
+  
+generic <- generic %>% 
+  group_by(year) %>% 
+  mutate(mean_dem = mean(dem)) %>% 
+  mutate(mean_rep = mean(rep))
+
+generic <- generic %>% 
+  select("year", "mean_dem", "mean_rep") %>% 
+  unique()
+
+generic_2022_avg$year <- as.numeric(generic_2022_avg$year)
+
+# join generic ballot dfs
+generic <- generic %>% full_join(generic_2022_avg)
+```
+
+```{r house, include = FALSE, echo = FALSE}
+house <- house %>% 
+  select("year", "R_votes", "D_votes", "R_seats", "D_seats", "R_majorvote_pct", "D_majorvote_pct", "winner_party") %>% 
+  mutate(D_seats_before = lag(D_seats)) %>% 
+  mutate(R_seats_before = lag(R_seats))
+
+house_2022 <- data.frame("year" = 2022,
+                       "R_votes" = NA, 
+                       "D_votes" = NA, 
+                       "R_seats" = NA, 
+                       "D_seats" = NA, 
+                       "R_majorvote_pct" = NA, 
+                       "D_majorvote_pct" = NA, 
+                       "winner_party" = NA,
+                       "D_seats_before" = 220,
+                       "R_seats_before" = 212)
+
+house <- rbind(house, house_2022)
+
+house <- house %>% 
+  left_join(generic, by = "year")
+
+house <- house %>% 
+  mutate(presparty = case_when(
+         year == 1950 ~ "1",
+         year == 1952 ~ "1",
+         year == 1954 ~ "0",
+         year == 1956 ~ "0",
+         year == 1958 ~ "0",
+         year == 1960 ~ "0",
+         year == 1962 ~ "1",
+         year == 1964 ~ "1",
+         year == 1966 ~ "1",
+         year == 1968 ~ "1",
+         year == 1970 ~ "0",
+         year == 1972 ~ "0",
+         year == 1974 ~ "0",
+         year == 1976 ~ "0",
+         year == 1978 ~ "1",
+         year == 1980 ~ "1",
+         year == 1982 ~ "0",
+         year == 1984 ~ "0",
+         year == 1986 ~ "0",
+         year == 1988 ~ "0",
+         year == 1990 ~ "0",
+         year == 1992 ~ "0",
+         year == 1994 ~ "1",
+         year == 1996 ~ "1",
+         year == 1998 ~ "1",
+         year == 2000 ~ "1",
+         year == 2002 ~ "0",
+         year == 2004 ~ "0",
+         year == 2006 ~ "0",
+         year == 2008 ~ "0",
+         year == 2010 ~ "1",
+         year == 2012 ~ "1",
+         year == 2014 ~ "1",
+         year == 2016 ~ "1",
+         year == 2018 ~ "0",
+         year == 2020 ~ "0",
+         year == 2022 ~ "1")) 
+
+house$D_votes <- as.numeric(gsub(",","",house$D_votes))
+
+df <- house %>% 
+  rename("demballot" = "mean_dem") %>% 
+  rename("repballot" = "mean_rep") %>% 
+  mutate(demballotdif = demballot-repballot) %>% 
+  mutate(repballotdif = repballot-demballot) %>% 
+  filter(year != 1948)
+
+df <- df %>%
+  left_join(gdp, by = "year")
+```
+
+
+# Introduction
+In this week's blog, I present my final prediction model for the 2022 House Midterms. My final prediction model is a linear regression model using data from 1950-2020 to then predict the results in the House of Representatives for 2022. I predict that the **Democrats will win 207 seats**, while the **Republicans will win 223 seats**, resulting in a Republican victory in the House of Representatives. 
+
+# Model Justification
+
+The main inspiration from my model came from the article “Will Democrats Catch a Wave? The Generic Ballot Model and the 2018 US House Elections” by Alan I. Abramowitz (2018). This article discusses how one model that took in only three variables resulted in variables with high significance. These variables were: 1) the number of seats a party held before the given election, 2) whether the president’s party was Democrat or Republican, and the party’s lead or deficit on the generic ballot immediately after Labor Day. Although this was done for the Republican party, I gathered that the same could be applied to the Democrats.
+
+Additionally, Gelman and King (1993) found that the closer it is to election day, the more accurate the polls are. This could be why the generic ballot variable used by Abramowitz (2018) also took into account only the results after Labor Day. Given this information, I filter the generic ballot polling data to only include polls that were conducted 52 days or less before election day. I decided to have this cutoff be 52 days because in 1952, the closest poll to election day was one that was conducted 51.5 days before.
+
+I also added GDP as a variable because Achen and Bartels (2017) found that it was possible to fairly accurately account for past presidential election outcomes based on how much real income growth voters experienced in the six months leading up to the election. However, also understanding that voters are more likely to remember the last couple months of an official’s term rather than their entire term, I filtered for data from Q7 when examining the GDP growth percentage.
+
+To gather all of these independent variables, I combined the historical data of nationwide vote and seat share from 1948 to 2020 with a dataset of generic ballot results (like I mentioned above, filtering these for polls 52 days before the election) and a data set for GDP data. With the data from the generic ballot, I was sure to make variables for the generic ballot differences. All of these variables were used to predict the seat share of each party, Democrat and Republican, using a simple linear model.
+
+
+# Model Formulas
+
+I used two formulas for my model, one for each party (note that the train_lm data was the data set after filtering for 2022):
+
+For Democrat seat share: lm(D_seats ~  demballotdif + presparty + D_seats_before + GDP_growth_pct, data = train_lm)
+For Republican seat share: lm(R_seats ~  repballotdif + presparty + R_seats_before + GDP_growth_pct, data = train_lm)
+
+
+```{r lm model}
+
+# make lm
+train_lm <- df %>% 
+  filter(year != 2022)
+
+test_lm <- df %>% 
+  filter(year == 2022)
+
+print(test_lm)
+
+train_model_demlm <- lm(D_seats ~  demballotdif + presparty + D_seats_before + GDP_growth_pct,
+                       data = train_lm)
+
+train_model_replm <- lm(R_seats ~  repballotdif + presparty + R_seats_before + GDP_growth_pct, 
+                       data = train_lm)
+
+# stargazer chart
+stargazer(train_model_demlm, train_model_replm, header=FALSE, type='text', no.space = TRUE, single.row = TRUE, title = "Two-Party Seat Share Models",
+          covariate.labels = c("Dem Generic Ballot Lead/Deficit", "Rep Generic Ballot Lead/Deficit", "President's Party", "Dem Seats Before Election", "Rep Seats Before Election", "GDP Growth"))
+
+# predict 2022
+pred_2022_demlm <- predict(train_model_demlm, newdata = test_lm, interval = "prediction")
+
+pred_2022_replm <- predict(train_model_replm, newdata = test_lm, interval = "prediction")
+
+print(pred_2022_demlm)
+print(pred_2022_replm)
+```
+As shown above, almost all variables, excluding the GDP growth, are statistically significant at the 1% significance level (p < 0.01). For GDP growth used to predict the Democrat seat share, it is statistically significant at the 5% level. The adjusted R squared for Democrats is 0.763 and for Republicans is 0.760. 
+As we can see in the generic ballot data, for each additional point lead in the generic ballot, the Democratic party is projected to gain approximately 1.919 seats; for Republicans this projected seat gain is approximately 1.845. This value is similar for both parties. 
+Moreover, when looking at the president’s party variable, we can see that if the president is a Democrat, their party will lose about 18 seats, while if the president is a Republican, their party will gain about 17 or 18 seats. Additionally, for every additional seat held before the election, the proportion of a seat that the Democratic party is projected to gain is approximately 0.379; for Republicans that proportion is 0.400. 
+GDP growth is a bit more nuanced, given that it lacks the same level of statistical significance as the other variables. According to the data, for every percentage point increase in GDP growth, the Democrats are projected to lose 1.681 seats while the Republicans are projected to lose 0.045 seats. This is not in line with other findings in our reading, and also intuition, and given the relative insignificance of these variables, we can conclude that the GDP growth variable is not very indicative when it comes to predicting a party’s seat share.
+
+# Model Validation
+
+## In-Sample Fit
+
+To conduct an in-sample fit, I use already existing data and examine the r-squareds and compare the in-sample error. In other words, we are looking at how often a prediction on historical data matches the actual historical result. The r-squareds of my model were strong, at about 0.76. To compare the in-sample error, I graphed historical results versus predictions for my models.
+
+```{r in-sample}
+par(mfrow=c(2,2))
+plot(df$year, df$D_seats, 
+     type = "l",
+     col = "blue",
+     main = "Democrat",
+     xlab = "Year",
+     ylab = "Seat Share",
+     sub = "True Y (line), Predicted Y (dot)")
+points(df$year, predict(train_model_demlm, df))
+
+plot(df$year, df$R_seats, 
+     type = "l",
+     col = "red",
+     main = "Republican",
+     xlab = "Year",
+     ylab = "Seat Share",
+     sub = "True Y (line), Predicted Y (dot)")
+points(df$year, predict(train_model_replm, df))
+```
+As seen above, the models for predicting both Democrat and Republican seat share are fairly accurate despite a few points.
+
+## Out-of-Sample Fit
+
+When conducting an out-of-sample fit, we need to withhold one historical observation from the data set to predict its result and examine its accuracy to the actual result. Each of the values below show the result of predicted seat share minus actual seat share for each model. As one can see, for the Democrats, the model predicted a lower value than the actual, and the opposite is true for Republicans.
+
+```{r out-of-sample}
+outsamp_mod_d <- lm(D_seats ~  demballotdif + presparty + D_seats_before + GDP_growth_pct, 
+                    train_lm[train_lm$year != 2018,])
+outsamp_pred_d <- predict(outsamp_mod_d, 
+                        train_lm[train_lm$year == 2018,])
+outsamp_true_d <- train_lm$D_seats[train_lm$year == 2018] 
+outsamp_pred_d - outsamp_true_d
+
+outsamp_mod_r <- lm(R_seats ~  demballotdif + presparty + D_seats_before + GDP_growth_pct, 
+                    train_lm[train_lm$year != 2018,])
+outsamp_pred_r <- predict(outsamp_mod_r, 
+                        train_lm[train_lm$year == 2018,])
+outsamp_true_r <- train_lm$R_seats[train_lm$year == 2018] 
+outsamp_pred_r - outsamp_true_r
+```
+
+# Prediction Intervals
+
+```{r pred interval}
+interval <- data.frame("Model" = character(), 
+                    "Fit" = numeric(),
+                    "lwr" = numeric(),
+                    "upr" = numeric(),
+                    stringsAsFactors = FALSE)
+
+interval[1, ] <- list("Democrat", pred_2022_demlm[1,1], pred_2022_demlm[1,2], pred_2022_demlm[1,3])
+interval[2, ] <- list("Republican", pred_2022_replm[1,1], pred_2022_replm[1,2], pred_2022_replm[1,3])
+
+interval$lwr <- as.numeric(interval$lwr)
+interval$Fit <- as.numeric(interval$Fit)
+interval$upr <- as.numeric(interval$upr)
+
+print(interval)
+
+# graph
+ggplot(data = interval, aes(x = Model, y = Fit, col = Model)) + 
+  geom_point() + 
+  geom_errorbar(aes(ymin = lwr, ymax = upr)) + 
+  labs(title = "Predicted Seat Share for 2022") + 
+  scale_color_manual(values = c("Blue","Red")) +
+  geom_hline(yintercept = 218, linetype = 'dotted')
+```
+The two plots above depict the fit, lower, and upper bounds of each model's seat share prediction. For Democrats, the fit is approximately 207 seats, the lower is approximately 175 seats, and the upper is approximately 238 seats. For Republicans, it is approximately 223 seats, 192 seats, and 254 seats, respectively. The dotted line represents 218 seats, which is needed for majority.
+
+# Final Prediction
+
+Given all these findings from my model, my prediction for the 2022 midterm election is that Democrats will win 207 seats and Republicans will win 223 seats in the House of Representatives. This number does not add up to 435 seats because I had two separate models for Democrat seat share and Republican seat share. 

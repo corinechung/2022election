@@ -61,29 +61,29 @@
 
 		<p>This week, I examine whether or not there is a relationship between turnout and expert rating. To do so, I run two models: the first seeing if expert rating can predict turnout, and the second doing the same while controlling for incumbency.</p>
 <pre tabindex="0"><code>## 
-## ===========================================================
-##                               Dependent variable:          
-##                     ---------------------------------------
-##                                     turnout                
-##                             (1)                 (2)        
-## -----------------------------------------------------------
-## avg_rating                -0.006             -0.012**      
-##                           (0.005)             (0.006)      
-##                                                            
-## RepStatusIncumbent                            0.035*       
-##                                               (0.021)      
-##                                                            
-## Constant                 0.597***            0.605***      
-##                           (0.022)             (0.022)      
-##                                                            
-## -----------------------------------------------------------
-## Observations                193                 193        
-## R2                         0.009               0.024       
-## Adjusted R2                0.003               0.013       
-## Residual Std. Error  0.117 (df = 191)    0.117 (df = 190)  
-## F Statistic         1.671 (df = 1; 191) 2.294 (df = 2; 190)
-## ===========================================================
-## Note:                           *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+## ============================================================
+##                               Dependent variable:           
+##                     ----------------------------------------
+##                                     turnout                 
+##                             (1)                 (2)         
+## ------------------------------------------------------------
+## avg_rating                -0.004              -0.012**      
+##                           (0.005)             (0.006)       
+##                                                             
+## RepStatusIncumbent                            0.047**       
+##                                               (0.021)       
+##                                                             
+## Constant                 0.570***             0.579***      
+##                           (0.022)             (0.022)       
+##                                                             
+## ------------------------------------------------------------
+## Observations                193                 193         
+## R2                         0.004               0.030        
+## Adjusted R2               -0.001               0.020        
+## Residual Std. Error  0.117 (df = 191)     0.116 (df = 190)  
+## F Statistic         0.719 (df = 1; 191) 2.946* (df = 2; 190)
+## ============================================================
+## Note:                            *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
 </code></pre><p>The first model shows that there is not a strong relationship between the rating and turnout. However, once incumbency is added, there seems to be a stronger relationship, and the data demonstrates that as a a district is predicted to be more Republican, the turnout decreases by about 0.016 points. Though it has more significance, this is still a small value.</p>
 
 
@@ -101,7 +101,7 @@
         		<footer>
 			
 			<span>
-			&copy; <time datetime="2022-12-17 02:57:19.266342 -0500 EST m=&#43;0.347550718">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			&copy; <time datetime="2022-12-17 03:03:30.186214 -0500 EST m=&#43;0.348749855">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
 			</span>
 		</footer>
 

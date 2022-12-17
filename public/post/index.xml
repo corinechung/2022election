@@ -17,6 +17,16 @@ I ran a simple linear regression model between Democratic voteshare and Democrat
     </item>
     
     <item>
+      <title>Final Prediction</title>
+      <link>http://example.org/post/final-prediction/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/final-prediction/</guid>
+      <description>Introduction In this week&amp;rsquo;s blog, I present my final prediction model for the 2022 House Midterms. My final prediction model is a linear regression model using data from 1950-2020 to then predict the results in the House of Representatives for 2022. I predict that the Democrats will win 207 seats, while the Republicans will win 223 seats, resulting in a Republican victory in the House of Representatives.
+Model Justification The main inspiration from my model came from the article “Will Democrats Catch a Wave?</description>
+    </item>
+    
+    <item>
       <title>Shocks</title>
       <link>http://example.org/post/shocks/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -32,7 +42,7 @@ I ran a simple linear regression model between Democratic voteshare and Democrat
       
       <guid>http://example.org/post/2022-12-16-the-ground-game/</guid>
       <description>This week, I examine whether or not there is a relationship between turnout and expert rating. To do so, I run two models: the first seeing if expert rating can predict turnout, and the second doing the same while controlling for incumbency.
-## ## =========================================================== ## Dependent variable: ## --------------------------------------- ## turnout ## (1) (2) ## ----------------------------------------------------------- ## avg_rating -0.006 -0.012** ## (0.005) (0.006) ## ## RepStatusIncumbent 0.035* ## (0.021) ## ## Constant 0.</description>
+## ## ============================================================ ## Dependent variable: ## ---------------------------------------- ## turnout ## (1) (2) ## ------------------------------------------------------------ ## avg_rating -0.004 -0.012** ## (0.005) (0.006) ## ## RepStatusIncumbent 0.047** ## (0.021) ## ## Constant 0.</description>
     </item>
     
   </channel>
