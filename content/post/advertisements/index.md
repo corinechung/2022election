@@ -1,72 +1,26 @@
-<!DOCTYPE html>
-<html lang="en-us">
-    <head>
-		
-		
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-		<title>Advertisements &middot; My New Hugo Site</title>
-
-		
-		<link rel="stylesheet" href="/css/style.css">
-		<link rel="stylesheet" href="/css/fonts.css">
-		
-		<link rel="icon" href="/favicon.ico"/>
-		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-		<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-
-		
-		<link href="" rel="alternate" type="application/rss+xml" title="My New Hugo Site" />
-
-		<script src="/js/darkmode.js"></script>
-	</head>
-
-    <body>
-        		<nav class="nav">
-			<div class="nav-container">
-				<a href="/">
-					
-						<h2 class="nav-title">My New Hugo Site</h2>
-					
-				</a>
-				<ul>
-    
-    
-</ul>
-			</div>
-		</nav>
-
-        <div id="darkModeToggle" onclick="toggleDarkMode()">
-  &#9680; 
-</div>
-
-        
-
-<main>
-	
+---
+title: Advertisements
+author: ''
+date: ''
+slug: []
+categories: []
+tags: []
+---
 
 
-        <div class="post">
-		<div class="post-info">
-    <span>Written by</span>
-        
-</div>
-
-		<h1 class="post-title">Advertisements</h1>
-<div class="post-line"></div>
-
-		
-
-		
+This week, I explored the effect of political advertisements (from 2006 to 2018) on the Democrat voteshare at the Congressional district level. The specific relationship I will explore is the effect that Democratic advertisement share (the percentage of ads run in the district that were for the Democratic candidate) has on Democratic voteshare.
 
 
-<p>This week, I explored the effect of political advertisements (from 2006 to 2018) on the Democrat voteshare at the Congressional district level. The specific relationship I will explore is the effect that Democratic advertisement share (the percentage of ads run in the district that were for the Democratic candidate) has on Democratic voteshare.</p>
-<p>I ran a simple linear regression model between Democratic voteshare and Democratic ad share. The table below shows each district’s linear regression model and its r-squared value and coefficient for Democratic ad share.</p>
-<pre><code>## # A tibble: 152 × 4
+
+
+
+I ran a simple linear regression model between Democratic voteshare and Democratic ad share. The table below shows each district’s linear regression model and its r-squared value and coefficient for Democratic ad share.
+
+
+```
+## # A tibble: 152 × 4
 ##     state          st_cd_fips r_squared coefficient
-##     &lt;chr&gt;          &lt;chr&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+##     <chr>          <chr>          <dbl>       <dbl>
 ##   1 Alabama        0102       1             0.276  
 ##   2 Alabama        0106       0.995        -0.124  
 ##   3 Arizona        0401       0.738         0.153  
@@ -218,35 +172,28 @@
 ## 149 West Virginia  5403       0.639        -0.340  
 ## 150 Wisconsin      5503       1             0.202  
 ## 151 Wisconsin      5507       1             0.0386 
-## 152 Wisconsin      5508       0.0559        0.327</code></pre>
-<p>From these model results, I plot the distribution of the coefficients and r-squared values.</p>
-<p><img src="http://example.org/post/advertisements/index_files/figure-html/coefficient-1.png" width="672" /></p>
-<p>The above graph is the distribution of the coefficients of the congressional districts available in the 2006-2018 data. Almost all of the coefficients fell in the 0 range.</p>
-<p>Because of this, I focus on the center of the graph, which is approximately the -5 to 5 range, by introducing limits.</p>
-<pre><code>## Warning: Removed 7 rows containing non-finite values (stat_bin).</code></pre>
-<p><img src="http://example.org/post/advertisements/index_files/figure-html/smaller%20coefficient-1.png" width="672" /></p>
-<p>Now, although the distribution is still relatively normal, there are more districts with positive coefficients. This is indicative that there are more districts where there is a positive between Democratic ad share and Democratic voteshare, meaning the greater the Democratic ad share, the greater the Democratic voteshare is.</p>
-<p>Next, I examine the distribution of r-squared values.</p>
-<p><img src="http://example.org/post/advertisements/index_files/figure-html/graph%202-1.png" width="672" /></p>
-<p>The above graph is the distribution of the r-squared values of the congressional districts available in the 2006-2018 data. Most of the models have an r-squared value of 1. This means that the predicted value was identical to the observed value. This may have been an error, as I tried to filter out districts with only one value to base the prediction on.</p>
+## 152 Wisconsin      5508       0.0559        0.327
+```
+
+From these model results, I plot the distribution of the coefficients and r-squared values.
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/coefficient-1.png" width="672" />
+
+The above graph is the distribution of the coefficients of the congressional districts available in the 2006-2018 data. Almost all of the coefficients fell in the 0 range.
+
+Because of this, I focus on the center of the graph, which is approximately the -5 to 5 range, by introducing limits.
 
 
-		
-	</div>
+```
+## Warning: Removed 7 rows containing non-finite values (stat_bin).
+```
 
-	<div class="pagination">
+<img src="{{< blogdown/postref >}}index_files/figure-html/smaller coefficient-1.png" width="672" />
 
-		<a href="#" class="top">Top</a>
-	</div>
-</main>
+Now, although the distribution is still relatively normal, there are more districts with positive coefficients. This is indicative that there are more districts where there is a positive between Democratic ad share and Democratic voteshare, meaning the greater the Democratic ad share, the greater the Democratic voteshare is.
 
+Next, I examine the distribution of r-squared values.
 
-        		<footer>
-			
-			<span>
-			&copy; <time datetime="2022-12-16 23:18:37.815871 -0500 EST m=&#43;0.449805734">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
-			</span>
-		</footer>
+<img src="{{< blogdown/postref >}}index_files/figure-html/graph 2-1.png" width="672" />
 
-    </body>
-</html>
+The above graph is the distribution of the r-squared values of the congressional districts available in the 2006-2018 data. Most of the models have an r-squared value of 1. This means that the predicted value was identical to the observed value. This may have been an error, as I tried to filter out districts with only one value to base the prediction on.
