@@ -13,7 +13,14 @@ Michigan is known to be a battleground state, where races are highly contested. 
 
 Examining Michigan on a more specific district-level, Michigan underwent redistricting district after the 2020 census. Elissa Slotkin was first elected to represent Michigan's 8th Congressional District in 2018, after defeating the incumbent, Mike Bishop (R), by a 3.8% margin (50.6% to 46.8%). In 2020, Slotkin was one of the seven Democrats to be elected in a district that had voted for Donald Trump in the 2020. In December of 2021, Slotkin announced that she would be running for re-election in the newly redrawn 7th District, which includes Clinton, Ingham, Livingston, and Shiawassee counties, most of Eaton County, parts of Oakland and Genesee counties, and Lansing, the state capital. In the 2020 election, this district barely supported Joe Biden over Donald Trump (49.4% to 48.9%)
 
-For the 2022 election, incumbent Elissa Slotkin was running as a Democrat against Republican Tom Barrett.  FiveThirtyEight had Elissa Slotkin as being “slightly favored to win Michigan’s 7th District.” Out of a sample of 100 simulated outcomes, Elissa Slotkin won 65 in 100 times and Tom Barrett won 35 in 100 times. Slotkin was attempting to appeal to the voters by marketing herself as a bipartisan, independent voice in Congress who would focus on lowering the cost of healthcare and prescription drugs, supporting supply chains in the U.S., and implementing campaign finance reform. Barrett had a focus the on cost of living, the opioid crisis, border security, and crime. Both candidates campaigned extensively across the district in an attempt to meet and win over new voters.
+For the 2022 election, incumbent Elissa Slotkin was running as a Democrat against Republican Tom Barrett.  FiveThirtyEight had Elissa Slotkin as being “slightly favored to win Michigan’s 7th District.” Out of a sample of 100 simulated outcomes, Elissa Slotkin won 65 in 100 times and Tom Barrett won 35 in 100 times. The image below shows how these chances of winning have shifted since June 1 2022. The blue line represents Slotkin's chances, the red represents Barrett's chances, and the yellow represent Independent Leah Dailey's chances.
+<div class="figure">
+<img src="chances.png" alt="my caption" width="90%" />
+<p class="caption">Figure 1: my caption</p>
+</div>
+
+
+Slotkin was attempting to appeal to the voters by marketing herself as a bipartisan, independent voice in Congress who would focus on lowering the cost of healthcare and prescription drugs, supporting supply chains in the U.S., and implementing campaign finance reform. Barrett had a focus the on cost of living, the opioid crisis, border security, and crime. Both candidates campaigned extensively across the district in an attempt to meet and win over new voters.
 
 On November 8, 2022, incumbent Elissa Slotkin (D) defeated Tom Barrett (R) and Leah Dailey (I) in the general election for United States House Michigan District 7. Slotkin received 51.5% of the votes while Barrett and Dailey received 46.5% and 2.0%, respectively. This narrow win indicates that FiveThirtyEight’s prediction was accurate overall. 
 

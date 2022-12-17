@@ -22,7 +22,7 @@ In this week's blog, I present my final prediction model for the 2022 House Midt
 
 # Model Justification
 
-The main inspiration from my model came from the article “Will Democrats Catch a Wave? The Generic Ballot Model and the 2018 US House Elections” by Alan I. Abramowitz (2018). This article discusses how one model that took in only three variables resulted in variables with high significance. These variables were: 1) the number of seats a party held before the given election, 2) whether the president’s party was Democrat or Republican, and the party’s lead or deficit on the generic ballot immediately after Labor Day. Although this was done for the Republican party, I gathered that the same could be applied to the Democrats.
+The main inspiration from my model came from the article “Will Democrats Catch a Wave? The Generic Ballot Model and the 2018 US House Elections” by Alan I. Abramowitz (2018). This article discusses how one model that took in only three variables resulted in variables with high significance. These variables were: 1) the number of seats a party held before the given election, 2) whether the president’s party was Democrat or Republican, and 3) the party’s lead or deficit on the generic ballot immediately after Labor Day. Although this was done for the Republican party, I gathered that the same could be applied to the Democrats.
 
 Additionally, Gelman and King (1993) found that the closer it is to election day, the more accurate the polls are. This could be why the generic ballot variable used by Abramowitz (2018) also took into account only the results after Labor Day. Given this information, I filter the generic ballot polling data to only include polls that were conducted 52 days or less before election day. I decided to have this cutoff be 52 days because in 1952, the closest poll to election day was one that was conducted 51.5 days before.
 
@@ -99,6 +99,11 @@ To conduct an in-sample fit, I use already existing data and examine the r-squar
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/in-sample-1.png" width="672" />
 
+<div class="figure">
+<img src="model.png" alt="my caption" width="90%" />
+<p class="caption">Figure 1: my caption</p>
+</div>
+
 As seen above, the models for predicting both Democrat and Republican seat share are fairly accurate despite a few points.
 
 ## Out-of-Sample Fit
@@ -126,8 +131,18 @@ When conducting an out-of-sample fit, we need to withhold one historical observa
 ```
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/pred interval-1.png" width="672" />
+<div class="figure">
+<img src="pred.png" alt="my caption" width="90%" />
+<p class="caption">Figure 2: my caption</p>
+</div>
+
 The two plots above depict the fit, lower, and upper bounds of each model's seat share prediction. For Democrats, the fit is approximately 207 seats, the lower is approximately 175 seats, and the upper is approximately 238 seats. For Republicans, it is approximately 223 seats, 192 seats, and 254 seats, respectively. The dotted line represents 218 seats, which is needed for majority.
 
 # Final Prediction
 
 Given all these findings from my model, my prediction for the 2022 midterm election is that Democrats will win 207 seats and Republicans will win 223 seats in the House of Representatives. This number does not add up to 435 seats because I had two separate models for Democrat seat share and Republican seat share. 
+
+# References
+Achen, Christopher H. and Bartels, Larry M. Democracy for Realists: Why Elections Do Not Produce Responsive Government, volume 4. Princeton University Press, 2017. 
+Abramowitz, Alan I. "Will Democrats Catch a Wave? The Generic Ballot Model and the 2018 US House Elections." Cambridge University Press, 2018.
+Gelman, Andrew and King, Gary. Why are American presidential election campaign polls so variable when votes are so predictable? British Journal of Political Science, 23(4): 409–451, 1993.

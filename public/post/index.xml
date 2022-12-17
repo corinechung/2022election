@@ -37,6 +37,16 @@ Examining Michigan on a more specific district-level, Michigan underwent redistr
     </item>
     
     <item>
+      <title>Post-Election Reflection</title>
+      <link>http://example.org/post/post-election-reflection/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/post-election-reflection/</guid>
+      <description>2022 Midterm Election Results Republicans were able to take control of the House of Representatives by winning 222 seats - 4 more than they needed for the majority at 218. Democrats only won 213 seats, therefore losing the majority.
+My Model My model took four variables: 1) the number of seats a party held before the given election, 2) whether the president’s party was Democrat or Republican, 3) the party’s lead or deficit on the generic ballot, and 4) GDP growth.</description>
+    </item>
+    
+    <item>
       <title>Shocks</title>
       <link>http://example.org/post/shocks/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -52,7 +62,7 @@ Examining Michigan on a more specific district-level, Michigan underwent redistr
       
       <guid>http://example.org/post/2022-12-16-the-ground-game/</guid>
       <description>This week, I examine whether or not there is a relationship between turnout and expert rating. To do so, I run two models: the first seeing if expert rating can predict turnout, and the second doing the same while controlling for incumbency.
-## ## ============================================================= ## Dependent variable: ## ----------------------------------------- ## turnout ## (1) (2) ## ------------------------------------------------------------- ## avg_rating -0.001 -0.011* ## (0.005) (0.006) ## ## RepStatusIncumbent 0.059*** ## (0.022) ## ## Constant 0.</description>
+## ## =========================================================== ## Dependent variable: ## --------------------------------------- ## turnout ## (1) (2) ## ----------------------------------------------------------- ## avg_rating -0.003 -0.009 ## (0.005) (0.006) ## ## RepStatusIncumbent 0.032 ## (0.022) ## ## Constant 0.</description>
     </item>
     
   </channel>
