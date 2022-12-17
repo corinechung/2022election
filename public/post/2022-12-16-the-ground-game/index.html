@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+		
+		
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>The Ground Game &middot; My New Hugo Site</title>
+
+		
+		<link rel="stylesheet" href="/css/style.css">
+		<link rel="stylesheet" href="/css/fonts.css">
+		
+		<link rel="icon" href="/favicon.ico"/>
+		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+		
+		<link href="" rel="alternate" type="application/rss+xml" title="My New Hugo Site" />
+
+		<script src="/js/darkmode.js"></script>
+	</head>
+
+    <body>
+        		<nav class="nav">
+			<div class="nav-container">
+				<a href="/">
+					
+						<h2 class="nav-title">My New Hugo Site</h2>
+					
+				</a>
+				<ul>
+    
+    
+</ul>
+			</div>
+		</nav>
+
+        <div id="darkModeToggle" onclick="toggleDarkMode()">
+  &#9680; 
+</div>
+
+        
+
+<main>
+	
+
+
+        <div class="post">
+		<div class="post-info">
+    <span>Written by</span>
+        
+</div>
+
+		<h1 class="post-title">The Ground Game</h1>
+<div class="post-line"></div>
+
+		
+
+		<p>This week, I examine whether or not there is a relationship between turnout and expert rating. To do so, I run two models: the first seeing if expert rating can predict turnout, and the second doing the same while controlling for incumbency.</p>
+<pre tabindex="0"><code>## 
+## ===============================================================
+##                                 Dependent variable:            
+##                     -------------------------------------------
+##                                       turnout                  
+##                             (1)                   (2)          
+## ---------------------------------------------------------------
+## avg_rating                -0.009*              -0.019***       
+##                           (0.005)               (0.006)        
+##                                                                
+## RepStatusIncumbent                              0.055***       
+##                                                 (0.021)        
+##                                                                
+## Constant                  0.604***              0.615***       
+##                           (0.022)               (0.022)        
+##                                                                
+## ---------------------------------------------------------------
+## Observations                193                   193          
+## R2                         0.019                 0.053         
+## Adjusted R2                0.013                 0.043         
+## Residual Std. Error   0.118 (df = 191)      0.116 (df = 190)   
+## F Statistic         3.611* (df = 1; 191) 5.352*** (df = 2; 190)
+## ===============================================================
+## Note:                               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+</code></pre><p>The first model shows that there is not a strong relationship between the rating and turnout. However, once incumbency is added, there seems to be a stronger relationship, and the data demonstrates that as a a district is predicted to be more Republican, the turnout decreases by about 0.016 points. Though it has more significance, this is still a small value.</p>
+
+
+		
+	</div>
+
+	<div class="pagination">
+		<a href="/post/advertisements/" class="right arrow">&#8594;</a>
+
+		<a href="#" class="top">Top</a>
+	</div>
+</main>
+
+
+        		<footer>
+			
+			<span>
+			&copy; <time datetime="2022-12-17 00:21:21.026869 -0500 EST m=&#43;0.356701140">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			</span>
+		</footer>
+
+    </body>
+</html>

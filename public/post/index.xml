@@ -16,5 +16,15 @@
 I ran a simple linear regression model between Democratic voteshare and Democratic ad share. The table below shows each district’s linear regression model and its r-squared value and coefficient for Democratic ad share.</description>
     </item>
     
+    <item>
+      <title>The Ground Game</title>
+      <link>http://example.org/post/2022-12-16-the-ground-game/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2022-12-16-the-ground-game/</guid>
+      <description>This week, I examine whether or not there is a relationship between turnout and expert rating. To do so, I run two models: the first seeing if expert rating can predict turnout, and the second doing the same while controlling for incumbency.
+## ## =============================================================== ## Dependent variable: ## ------------------------------------------- ## turnout ## (1) (2) ## --------------------------------------------------------------- ## avg_rating -0.009* -0.019*** ## (0.005) (0.006) ## ## RepStatusIncumbent 0.055*** ## (0.021) ## ## Constant 0.</description>
+    </item>
+    
   </channel>
 </rss>

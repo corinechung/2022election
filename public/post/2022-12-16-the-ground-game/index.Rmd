@@ -1,0 +1,75 @@
+---
+title: The Ground Game
+author: ''
+date: ''
+slug: []
+categories: []
+tags: []
+---
+```{r setup, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(janitor)
+library(stargazer)
+require(ggplot2)
+require(sf)
+library(usmap)
+library(rmapshaper)
+library(blogdown)
+library(Metrics)
+```
+
+```{r data, include=FALSE, warning=FALSE}
+cvap <- read.csv("cvap_district_2012-2020_clean.csv")
+hist <- read.csv("incumb_dist_1948-2020 (3).csv")
+expert <- read.csv("expert_rating.csv")
+
+cvap_district <- read_csv("cvap_district_2012-2020_clean.csv")%>%
+  rename(st_cd_fips = geoid) 
+hist_d<-read_csv("incumb_dist_1948-2020 (3).csv")%>%
+  filter(year == 2012 | year == 2014 | year == 2016 | year == 2018 | year == 2020)
+expert_d <- read_csv("expert_rating.csv")%>%
+  filter(!is.na(district))%>%
+  mutate(district_num=as.numeric(district),
+         dist_num=case_when(
+   district_num<10~paste0('0',district),
+    TRUE~district
+  ))
+
+dist_cvap <- hist_d %>%
+  inner_join(cvap_district, by = c('st_cd_fips', 'year','state'))%>%
+  mutate(district_num=as.numeric(district_num))
+data <- left_join(dist_cvap, expert_d, by=c('year','state','district_num'))
+data <- data %>%
+  mutate(totalvotes = RepVotes + DemVotes,
+         turnout = totalvotes/cvap,
+         DemVotesMajorPct = DemVotesMajorPercent/100,
+         RepVotesMajorPct = RepVotesMajorPercent/100)
+data_pred <- data %>% filter(!is.na(avg_rating))
+
+data_pred$id <- 1:nrow(data_pred)
+
+train <- data_pred %>% dplyr::sample_frac(0.50)
+test  <- dplyr::anti_join(data_pred, train, by = 'id')
+```
+
+This week, I examine whether or not there is a relationship between turnout and expert rating. To do so, I run two models: the first seeing if expert rating can predict turnout, and the second doing the same while controlling for incumbency. 
+
+```{r}
+lm1<-lm(turnout~avg_rating, data=train)
+lm2<-lm(turnout~avg_rating+RepStatus, data=train)
+
+accuracy<-function(model){
+  test$pred <- predict(model,test,allow.new.levels=TRUE)
+  rmse <- sqrt(mean(test$pred-test$turnout)^2)
+  mae <- mae(test$pred,test$turnout)
+  return(list('rmse'=rmse,'mae'=mae))
+}
+
+stargazer(lm1,lm2,type='text')
+```
+
+The first model shows that there is not a strong relationship between the rating and turnout. However, once incumbency is added, there seems to be a stronger relationship, and the data demonstrates that as a a district is predicted to be more Republican, the turnout decreases by about 0.016 points. Though it has more significance, this is still a small value.
