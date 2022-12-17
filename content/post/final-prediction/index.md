@@ -98,6 +98,7 @@ GDP growth is a bit more nuanced, given that it lacks the same level of statisti
 To conduct an in-sample fit, I use already existing data and examine the r-squareds and compare the in-sample error. In other words, we are looking at how often a prediction on historical data matches the actual historical result. The r-squareds of my model were strong, at about 0.76. To compare the in-sample error, I graphed historical results versus predictions for my models.
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/in-sample-1.png" width="672" />
+
 As seen above, the models for predicting both Democrat and Republican seat share are fairly accurate despite a few points.
 
 ## Out-of-Sample Fit

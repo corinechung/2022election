@@ -15,29 +15,29 @@ This week, I examine whether or not there is a relationship between turnout and 
 
 ```
 ## 
-## ================================================================
-##                                 Dependent variable:             
-##                     --------------------------------------------
-##                                       turnout                   
-##                              (1)                   (2)          
-## ----------------------------------------------------------------
-## avg_rating                -0.012**              -0.023***       
-##                            (0.005)               (0.006)        
-##                                                                 
-## RepStatusIncumbent                               0.062***       
-##                                                  (0.023)        
-##                                                                 
-## Constant                  0.602***               0.616***       
-##                            (0.022)               (0.022)        
-##                                                                 
-## ----------------------------------------------------------------
-## Observations                 193                   193          
-## R2                          0.030                 0.065         
-## Adjusted R2                 0.025                 0.055         
-## Residual Std. Error   0.123 (df = 191)       0.121 (df = 190)   
-## F Statistic         5.892** (df = 1; 191) 6.569*** (df = 2; 190)
-## ================================================================
-## Note:                                *p<0.1; **p<0.05; ***p<0.01
+## ===========================================================
+##                               Dependent variable:          
+##                     ---------------------------------------
+##                                     turnout                
+##                             (1)                 (2)        
+## -----------------------------------------------------------
+## avg_rating                -0.005              -0.012*      
+##                           (0.005)             (0.006)      
+##                                                            
+## RepStatusIncumbent                            0.041*       
+##                                               (0.023)      
+##                                                            
+## Constant                 0.581***            0.591***      
+##                           (0.023)             (0.024)      
+##                                                            
+## -----------------------------------------------------------
+## Observations                193                 193        
+## R2                         0.005               0.021       
+## Adjusted R2               0.00003              0.010       
+## Residual Std. Error  0.127 (df = 191)    0.127 (df = 190)  
+## F Statistic         1.005 (df = 1; 191) 2.012 (df = 2; 190)
+## ===========================================================
+## Note:                           *p<0.1; **p<0.05; ***p<0.01
 ```
 
 The first model shows that there is not a strong relationship between the rating and turnout. However, once incumbency is added, there seems to be a stronger relationship, and the data demonstrates that as a a district is predicted to be more Republican, the turnout decreases by about 0.016 points. Though it has more significance, this is still a small value.
